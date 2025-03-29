@@ -1,11 +1,16 @@
 <app-navbar></app-navbar>
 <div id="app" class="container mt-4 dark-theme">
-  <h1 class="text-center">Item List</h1>
-  <h2 class="text-center">Hello {{authService.currentUserSig()?.username}}</h2>
 
+<div class="toggle-container">
+  <button class="toggle-btn" (click)="toggleForm()">
+    <i class="fas" [ngClass]="isFormVisible ? 'fa-times' : 'fa-plus'"></i>
+    {{isFormVisible ? 'Cancel' : 'Add Item'}}
+  </button>
 
-  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
-    <app-image [itemForm]="itemForm" ></app-image>
+</div>
+
+  <form class="form" [ngClass]="{'form--hidden': !isFormVisible}" [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+    <app-image [itemForm]="itemForm"></app-image>
 
     <div class="mb-3">
       <input

@@ -3,7 +3,7 @@ import {Item} from '../item/Item';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ItemComponent} from '../item/item.component';
 import {ImageComponent} from '../image/image.component';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {amountValuesValidator} from '../../validators/amount-values.validator';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {Router, RouterModule} from '@angular/router';
@@ -26,7 +26,8 @@ import {NavbarComponent} from '../navbar/navbar.component';
     NgIf,
     NgForOf,
     RouterModule,
-    NavbarComponent
+    NavbarComponent,
+    NgClass
   ],
   animations: [
     trigger('itemAnimation', [
@@ -47,6 +48,7 @@ export class FormItemComponent implements OnInit, OnDestroy {
   formData!: Item;
   errorMessage: string = '';
   items: Item[] = [];
+  isFormVisible: boolean = false;
   private subscription: Subscription | null = null;
 
   constructor(
@@ -125,6 +127,28 @@ export class FormItemComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
+    }
+  }
+
+  toggleForm(): void {
+    const formEl = document.querySelector('.form');
+
+    if (this.isFormVisible) {
+
+      formEl?.classList.add('form-exit-animation');
+      setTimeout(() => {
+        this.isFormVisible = false;
+        formEl?.classList.remove('form-exit-animation');
+      }, 400);
+    } else {
+
+      this.isFormVisible = true;
+      setTimeout(() => {
+        formEl?.classList.add('form-enter-animation');
+        setTimeout(() => {
+          formEl?.classList.remove('form-enter-animation');
+        }, 400);
+      }, 10);
     }
   }
 

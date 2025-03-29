@@ -1,17 +1,16 @@
-
 $dark-bg: #121212;
 $dark-text: #e1e1e1;
 $dark-border: rgba(255, 255, 255, 0.15);
 $dark-shadow: rgba(0, 0, 0, 0.3);
 $form-max-width: 600px;
 $border-radius: 6px;
-
+$accent-color: #0d6efd;
+$hover-accent: rgba(40, 40, 40, 0.4) ;
 
 $input-height: clamp(35px, 5vh, 45px);
 $form-padding: clamp(1rem, 3vw, 2rem);
 $placeholder-color: #888;
-$transition-duration: 0.3s;
-
+$transition-duration: 0.4s;
 
 .container {
   max-width: $form-max-width;
@@ -26,12 +25,11 @@ h1 {
   color: $dark-text;
 }
 
-
 .form-control {
   height: $input-height;
   font-size: clamp(14px, 1.5vw, 16px);
   padding: 0.5rem clamp(0.5rem, 2vw, 1rem);
-  transition: all 0.3s ease;
+  transition: all $transition-duration ease;
   background-color: lighten($dark-bg, 5%);
   border: 1px solid $dark-border;
   color: $dark-text;
@@ -53,13 +51,72 @@ h1 {
   }
 }
 
-form {
+.toggle-container{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+
+.toggle-btn {
+  display: block;
+  height: 45px;
+  margin-bottom: 1.5rem;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: $border-radius;
+  background-color: rgba(57, 56, 56, 0.2);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all $transition-duration cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+  &:hover {
+    background-color: $hover-accent;
+    transform: translateY(-2px);
+    box-shadow:0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    background-color: rgba(15, 15, 15, 0.6);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6)
+  }
+
+
+
+  i {
+    margin-right: 8px;
+  }
+}
+}
+
+.form {
   padding: $form-padding;
   border-radius: clamp(8px, 1vw, 12px);
   box-shadow: 0 4px 6px $dark-shadow;
   background-color: lighten($dark-bg, 3%);
   border: 1px solid $dark-border;
   margin-bottom: clamp(2rem, 4vw, 3rem);
+  transform-origin: top center;
+  max-height: 1500px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height $transition-duration cubic-bezier(0.4, 0, 0.2, 1),
+  opacity $transition-duration ease-in-out,
+  transform $transition-duration cubic-bezier(0.4, 0, 0.2, 1),
+  margin-bottom $transition-duration ease;
+
+  &--hidden {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    transform: translateY(-20px);
+    border-width: 0;
+  }
+
   .mb-3 {
     margin-bottom: clamp(0.8rem, 2vw, 1.2rem);
   }
@@ -85,11 +142,11 @@ form {
     font-size: clamp(14px, 1.8vw, 18px);
     font-weight: 500;
     width: 100%;
-    background-color: #0d6efd;
+    background-color: $accent-color;
     color: white;
     border: none;
     border-radius: $border-radius;
-    transition: all 0.3s ease;
+    transition: all $transition-duration ease;
     cursor: pointer;
 
     &:disabled {
@@ -101,12 +158,11 @@ form {
     &:not(:disabled):hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      background-color: lighten(#0d6efd, 5%);
+      background-color: $hover-accent;
     }
   }
 }
 
-// Responsive Layout
 @media (min-width: 768px) {
   form {
     display: grid;
@@ -125,7 +181,6 @@ form {
   }
 }
 
-
 @keyframes itemAnimation {
   from {
     opacity: 0;
@@ -136,8 +191,46 @@ form {
     transform: translateY(0);
   }
 }
-form .mb-3, form button, app-image, app-item {
+
+.form .mb-3,
+.form button,
+app-image,
+app-item {
   animation: itemAnimation 0.5s ease forwards;
   animation-delay: calc(var(--item-index, 0) * 0.1s);
   opacity: 0;
+}
+
+.form-enter-animation {
+  animation: formEnter 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.form-exit-animation {
+  animation: formExit 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes formEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 1500px;
+  }
+}
+
+@keyframes formExit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 1500px;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+    max-height: 0;
+  }
 }
